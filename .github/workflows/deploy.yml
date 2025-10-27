@@ -1,22 +1,20 @@
 name: Deploy with Ansible
 
 on:
-  workflow_run:
-    workflows: ["CD devops 2025"]
-    types:
-      - completed
+  push:
+    branches:
+      - main  
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
+      - name: Install Ansible
+        run: sudo apt update && sudo apt install -y ansible
 
       - name: Run Ansible Playbook
         run: ansible-playbook -i ansible/inventories/setup.yml playbook-roles.yml
