@@ -10,6 +10,11 @@ on:
 jobs:
   test-backend:
     runs-on: ubuntu-24.04
+    env:  # ✅ Ajout pour passer les variables Sonar proprement
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: "https://sonarcloud.io"
+      SONAR_ORGANIZATION_KEY: ${{ secrets.SONAR_ORGANIZATION_KEY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,9 +33,9 @@ jobs:
         run: |
           mvn -B verify sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY }} \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.organization=$SONAR_ORGANIZATION_KEY \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN
 
   build-and-push-docker-image:
     needs: test-backend
