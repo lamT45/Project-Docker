@@ -1,0 +1,12 @@
+---
+# tasks file for roles/proxy
+- name: Launch HTTPD proxy
+  docker_container:
+    name: httpd
+    image: lam45/project-docker-httpd:latest
+    state: started
+    restart_policy: always
+    networks:
+      - name: project_network
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

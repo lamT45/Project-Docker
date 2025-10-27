@@ -1,0 +1,12 @@
+- hosts: all
+  gather_facts: true
+  become: true
+
+  roles:
+    - docker       # 1) install docker ✅
+    - network      # 2) create docker network ✅
+    - database     # 3) launch database ✅
+    - app          # 4) launch backend API ✅
+    - proxy        # 5) launch httpd reverse proxy ✅
+    - front        # 6) launch front (étape actuelle)
+

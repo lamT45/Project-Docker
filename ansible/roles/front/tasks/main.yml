@@ -1,0 +1,12 @@
+---
+# tasks file for roles/front
+- name: Launch Front container
+  docker_container:
+    name: front
+    image: lam45/project-docker-front:latest   # ← remplacer si ton image front a un autre nom
+    state: started
+    restart_policy: always
+    networks:
+      - name: project_network
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

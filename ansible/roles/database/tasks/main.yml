@@ -1,0 +1,16 @@
+---
+# tasks file for roles/database
+- name: Launch PostgreSQL container
+  docker_container:
+    name: database
+    image: lam45/project-docker-database:latest
+    state: started
+    restart_policy: always
+    networks:
+      - name: project_network
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: testdb
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

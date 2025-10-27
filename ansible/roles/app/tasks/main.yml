@@ -1,0 +1,12 @@
+---
+# tasks file for roles/app
+- name: Launch backend API container
+  docker_container:
+    name: backend
+    image: lam45/project-docker-backend:latest
+    state: started
+    restart_policy: always
+    networks:
+      - name: project_network
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

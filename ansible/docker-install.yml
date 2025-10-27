@@ -1,0 +1,65 @@
+- hosts: all
+  gather_facts: true
+  become: true
+
+  vars:
+    docker_distro: "{{ 'ubuntu' if ansible_facts['distribution'] == 'Ubuntu' else 'debian' }}"
+    docker_repo: "https://download.docker.com/linux/{{ docker_distro }}"
+    docker_gpg: "{{ docker_repo }}/gpg"
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - python3-venv
+        state: latest
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: "{{ docker_gpg }}"
+        state: present
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: "deb [arch=amd64] {{ docker_repo }} {{ ansible_facts['distribution_release'] }} stable"
+        state: present
+        update_cache: yes
+
+    - name: Install Docker Engine packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Install Python3 and pip3
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Create a virtual environment for Docker SDK
+      command: python3 -m venv /opt/docker_venv
+      args:
+        creates: /opt/docker_venv
+
+    - name: Install Docker SDK for Python in virtual environment
+      command: /opt/docker_venv/bin/pip install docker
+
+    - name: Make sure Docker is running
+      service:
+        name: docker
+        state: started
+      tags: docker
+
