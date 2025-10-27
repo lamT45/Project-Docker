@@ -26,12 +26,11 @@ jobs:
       - name: Analyse avec SonarCloud
         working-directory: ./backend
         run: |
-         mvn -B verify sonar:sonar \
-         -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-         -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY }} \
-         -Dsonar.host.url=https://sonarcloud.io \
-         -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY }} \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   build-and-push-docker-image:
     needs: test-backend
@@ -55,7 +54,7 @@ jobs:
       - name: Build and push database image
         uses: docker/build-push-action@v6
         with:
-          context: ./initdb     # ✅ dossier correct
+          context: ./initdb
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project-docker-database:latest
           push: true
 
