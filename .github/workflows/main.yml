@@ -24,7 +24,7 @@ jobs:
         run: mvn clean verify --file ./backend/pom.xml
 
       - name: Analyse avec SonarCloud
-        working-directory: ./backend  # ✅ CORRECTION IMPORTANTE
+        working-directory: ./backend
         run: mvn -B verify sonar:sonar \
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY }} \
@@ -34,7 +34,7 @@ jobs:
   build-and-push-docker-image:
     needs: test-backend
     runs-on: ubuntu-24.04
-    if: github.ref == 'refs/heads/main'  # Exécuté uniquement sur la branche main
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout code
@@ -53,7 +53,7 @@ jobs:
       - name: Build and push database image
         uses: docker/build-push-action@v6
         with:
-          context: ./initdb
+          context: ./initdb     # ✅ dossier correct
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project-docker-database:latest
           push: true
 
