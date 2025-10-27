@@ -22,6 +22,14 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn clean verify --file ./backend/pom.xml
+      - name: Analyse avec SonarCloud
+        run: mvn -B verify sonar:sonar \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY }} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          --file ./backend/pom.xml
+
 
   build-and-push-docker-image:
     needs: test-backend
@@ -45,7 +53,7 @@ jobs:
       - name: Build and push database image
         uses: docker/build-push-action@v6
         with:
-          context: ./database
+          context: ./database/data
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project-docker-database:latest
           push: true
 
