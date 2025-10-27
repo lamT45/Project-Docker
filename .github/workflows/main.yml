@@ -53,7 +53,7 @@ jobs:
       - name: Build and push database image
         uses: docker/build-push-action@v6
         with:
-          context: ./database/data
+          context: ./initdb
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project-docker-database:latest
           push: true
 
