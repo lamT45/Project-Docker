@@ -11,8 +11,7 @@
       - name: project_network
     published_ports:
       - "80:80"    # ✅ expose le reverse proxy à localhost:80
-
-
+  
 - name: Launch backend-blue container
   docker_container:
     name: backend-blue
