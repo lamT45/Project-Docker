@@ -1,8 +1,8 @@
 all:
   vars:
-    ansible_user: lam
-    ansible_connection: local
+    ansible_user: admin
+    ansible_ssh_private_key_file: /home/lam/.ssh/id_rsa
   children:
     prod:
       hosts:
-        localhost
+        lamyae.tala.takima.cloud
