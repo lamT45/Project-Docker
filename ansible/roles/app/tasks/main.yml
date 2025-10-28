@@ -24,17 +24,6 @@
     env:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
     published_ports:
-      - "8081:8080"   # ✅ OK → le backend écoute sur 8080 interne, exposé en 8081
+      - "8081:8080"  
 
-- name: Launch backend-green container
-  docker_container:
-    name: backend-green
-    image: lam45/project-docker-backend:latest
-    state: started
-    restart_policy: always
-    networks:
-      - name: project_network
-    env:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
-    published_ports:
-      - "8082:8080"   # ✅ OK → le backend écoute sur 8080 interne, exposé en 8082
+
