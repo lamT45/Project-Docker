@@ -1,5 +1,5 @@
+# roles/proxy/tasks/main.yml
 ---
-# tasks file for roles/proxy
 - name: Launch HTTPD proxy
   docker_container:
     name: httpd
@@ -8,5 +8,7 @@
     restart_policy: always
     networks:
       - name: project_network
+    published_ports:
+      - "8080:8080"     # ✅ On expose bien sur 80 public
   vars:
     ansible_python_interpreter: /usr/bin/python3

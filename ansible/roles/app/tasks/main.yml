@@ -1,20 +1,9 @@
 ---
 # tasks file for roles/app
 
-- name: Launch HTTPD proxy
+- name: Launch backend container
   docker_container:
-    name: httpd
-    image: lam45/project-docker-httpd:latest
-    state: started
-    restart_policy: always
-    networks:
-      - name: project_network
-    published_ports:
-      - "80:80"    # ✅ expose le reverse proxy à localhost:80
-  
-- name: Launch backend-blue container
-  docker_container:
-    name: backend-blue
+    name: backend
     image: lam45/project-docker-backend:latest
     state: started
     restart_policy: always
@@ -23,6 +12,5 @@
     env:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
     published_ports:
-      - "8081:8080"  
-
-
+      - "8082:8080"
+  tags: ["app"]  

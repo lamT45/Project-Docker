@@ -10,7 +10,7 @@ on:
 jobs:
   test-backend:
     runs-on: ubuntu-24.04
-    env:  # ✅ Ajout pour passer les variables Sonar proprement
+    env:  
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: "https://sonarcloud.io"
       SONAR_ORGANIZATION_KEY: ${{ secrets.SONAR_ORGANIZATION_KEY }}
@@ -69,3 +69,23 @@ jobs:
           context: ./httpd
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project-docker-httpd:latest
           push: true
+
+  deploy-with-ansible:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
+      - name: Run Ansible playbook
+        run: ansible-playbook -i ansible/inventories/setup.yml ansible/playbook-roles.yml

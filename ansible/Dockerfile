@@ -8,5 +8,4 @@ RUN apt-get update && \
 # Répertoire de travail à /ansible
 WORKDIR /ansible
 
-# Laisser Ansible s’exécuter directement
 ENTRYPOINT ["ansible-playbook"]
